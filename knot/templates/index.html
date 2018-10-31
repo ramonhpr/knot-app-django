@@ -1,0 +1,51 @@
+{% block content %}
+<h1>KNoT App</h1>
+<p>Welcome to KNoT Example app!</p>
+<form action="/knot/" method="post">
+	{% csrf_token %}
+	{% for field in form %}
+		{{field.label_tag}}
+		{{field}}
+		<br/>
+	{% endfor %}
+	<input type="submit" value="Register">
+</form>
+<a href="/devices">
+	<input type="button" value="getDevices">
+<a/>
+
+{% if devices %}
+<div class="devices">
+	<table>
+		<tr>
+			<th>ID<th/>
+			<th>NAME<th/>
+			<th>IS ONLINE<th/>
+		<tr/>
+		{% for dev in devices %}
+		<div class="devices">
+			<br/>
+			<tr>
+				<th>{{dev.id}}<th/>
+				<th>{{dev.name}}<th/>
+				<th>{{dev.online}}<th/>
+				<a href="/sensors?id={{dev.id}}">
+				<input type="button" value="get sensors">
+				<a/>
+
+			<tr/>
+			<br/>
+		<div/>
+		{% endfor %}
+	<table/>
+<div/>
+{% endif%}
+{% if sensors%}
+<table>
+	{% for sensor in sensors %}
+		<th>{{sensor.sensor_id}}</th>
+		<th>{{sensor.name}}</th>
+	{% endfor %}
+</table>
+{%endif%}
+{% endblock %}
