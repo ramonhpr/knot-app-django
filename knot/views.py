@@ -9,7 +9,7 @@ from django.forms.models import model_to_dict
 
 from models import Credentials
 
-from knotpy import KnotConnection
+from knotpy import *
 
 # Create your views here.
 
@@ -54,4 +54,11 @@ class Sensors(View):
         cred = model_to_dict(Credentials.objects.all()[0])
         conn = KnotConnection({'servername': cred.get('servername'), 'port':
         cred.get('port'), 'uuid': str(cred.get('uuid')), 'token': cred.get('token')}, protocol='http', cloud=mapCloud[cred.get('cloud')])
-        return render(request, 'index.html', {'sensors': [conn.getSensorDetails(request.GET.get('id'), i) for i in conn.listSensors(request.GET.get('id'))]})
+        sensors = [conn.getSensorDetails(request.GET.get('id'), i) for i in conn.listSensors(request.GET.get('id'))]
+        for sensor in sensors:
+            try:
+                sensor.update({'data':conn.getData(request.GET.get('id'), limit=1)[0]})
+            except Exception:
+                pass
+        print(sensors)
+        return render(request, 'index.html', {'sensors': sensors})

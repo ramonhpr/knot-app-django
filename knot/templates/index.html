@@ -45,6 +45,7 @@
 	{% for sensor in sensors %}
 		<th>{{sensor.sensor_id}}</th>
 		<th>{{sensor.name}}</th>
+		<th>{{sensor.data.data.value}}</th>
 	{% endfor %}
 </table>
 {%endif%}
